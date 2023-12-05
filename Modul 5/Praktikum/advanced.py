@@ -21,17 +21,19 @@ grouped_heights = group_heights(tinggi_badan, interval_size)
 for group_key, data in grouped_heights.items():
     print(f"Interval {data['interval']} : {data['frequencies']} orang")
 
-plt.hist(tinggi_badan, bins=range(150, 199, interval_size), density=True)
+# Visualisasi data dalam bentuk histogram
+plt.hist(tinggi_badan, bins=range(150, 200, interval_size), edgecolor='black', alpha=0.7, density=True)
 
+# Menambahkan kurva PDF dari distribusi normal
 mean_tinggi = np.mean(tinggi_badan)
 std_tinggi = np.std(tinggi_badan)
 
 x = np.linspace(min(tinggi_badan), max(tinggi_badan), 100)
-plt.plot(x, norm.pdf(x, mean_tinggi, std_tinggi), label='PDF', linewidth=2,  color="orange")
+plt.plot(x, norm.pdf(x, mean_tinggi, std_tinggi), label='PDF', linewidth=2, color="orange")
 
 plt.xlabel('Tinggi Badan')
-plt.ylabel('Frekuensi')
-plt.title('Histogram Tinggi Badan')
+plt.ylabel('Frekuensi Normalisasi')
+plt.title('Histogram dan Kurva PDF Tinggi Badan')
 
 plt.legend()
 plt.show()

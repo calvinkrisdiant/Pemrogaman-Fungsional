@@ -16,4 +16,11 @@ plt.bar(label_mahasiswa, nilai_mahasiswa, color='blue')
 plt.xlabel('Mahasiswa')
 plt.ylabel('Nilai Ujian')
 plt.title('Diagram Batang Nilai Ujian Mahasiswa')
+
+# Garis putus untuk rata-rata
+plt.axhline(y=rata_rata, color='red', linestyle='--', label=f'Rata-rata: {rata_rata:.2f}')
+
+# Menambahkan legenda
+plt.legend()
+
 plt.show()
