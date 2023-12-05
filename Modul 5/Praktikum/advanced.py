@@ -2,46 +2,36 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import norm
 
-# Data tinggi badan individu dalam sentimeter
-tinggi_badan = [165, 170, 155, 172, 180, 160, 175, 165, 185, 175, 170, 160]
+def group_heights(heights, interval_size):
+    grouped_heights = {}
+    
+    for height in heights:
+        group_key = (height // interval_size) * interval_size
+        if group_key not in grouped_heights:
+            grouped_heights[group_key] = {'interval': f"{group_key}-{group_key + interval_size - 1}", 'frequencies': 0}
+        grouped_heights[group_key]['frequencies'] += 1
+    
+    return grouped_heights
 
-# Misalnya interval ukuran per 10 sentimeter
+tinggi_badan = [165, 170, 155, 172, 180, 160, 175, 165, 185, 175, 170, 160]
 interval_size = 10
 
-# Fungsi untuk mengelompokkan tinggi badan ke dalam interval tertentu
-def group_into_intervals(data, interval_size):
-    intervals = {}
-    for height in data:
-        key = (height // interval_size) * interval_size
-        if key not in intervals:
-            intervals[key] = 0
-        intervals[key] += 1
-    return intervals
+grouped_heights = group_heights(tinggi_badan, interval_size)
 
-# Menghitung frekuensi tinggi badan dalam interval
-frekuensi_tinggi = group_into_intervals(tinggi_badan, interval_size)
-print("Frekuensi Tinggi Badan dalam Interval:", frekuensi_tinggi)
+for group_key, data in grouped_heights.items():
+    print(f"Interval {data['interval']} : {data['frequencies']} orang")
 
-# Visualisasi data dalam bentuk histogram dan kurva PDF
-fig, ax1 = plt.subplots()
+plt.hist(tinggi_badan, bins=range(150, 199, interval_size), density=True)
 
-# Histogram
-ax1.hist(tinggi_badan, bins=np.arange(min(tinggi_badan), max(tinggi_badan) + interval_size, interval_size), color='blue', edgecolor='black', alpha=0.7)
-ax1.set_xlabel('Tinggi Badan (cm)')
-ax1.set_ylabel('Frekuensi', color='blue')
-ax1.tick_params('y', colors='blue')
+mean_tinggi = np.mean(tinggi_badan)
+std_tinggi = np.std(tinggi_badan)
 
-# Kurva PDF
-ax2 = ax1.twinx()
-mu, std = np.mean(tinggi_badan), np.std(tinggi_badan)
-xmin, xmax = plt.xlim()
-x = np.linspace(xmin, xmax, 100)
-p = norm.pdf(x, mu, std)
-ax2.plot(x, p, 'k', linewidth=2)
-ax2.set_ylabel('PDF', color='black')
-ax2.tick_params('y', colors='black')
+x = np.linspace(min(tinggi_badan), max(tinggi_badan), 100)
+plt.plot(x, norm.pdf(x, mean_tinggi, std_tinggi), label='PDF', linewidth=2,  color="orange")
 
-plt.title('Histogram dan Kurva PDF Tinggi Badan')
+plt.xlabel('Tinggi Badan')
+plt.ylabel('Frekuensi')
+plt.title('Histogram Tinggi Badan')
+
+plt.legend()
 plt.show()
-
-
